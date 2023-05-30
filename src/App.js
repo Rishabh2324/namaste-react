@@ -9,6 +9,7 @@ import {
 
 import Header from "./components/Header";
 import LoadingScreen from "./components/LoadingScreen";
+import BottomNavigationBar from "./components/BottomNavigationBar";
 
 const Body = lazy(() => import("./components/Body"));
 const AboutUs = lazy(() => import("./components/About"));
@@ -16,6 +17,7 @@ const ErrorPage = lazy(() => import("./components/ErrorPage"));
 const Contact = lazy(() => import("./components/Contact"));
 const ResturantMenu = lazy(() => import("./components/ResturantMenu"));
 const Cart = lazy(() => import("./components/Cart"));
+const Offers = lazy(() => import("./components/Offers"));
 const Profile = lazy(() => import("./components/Profile"));
 
 const AppLayout = () => {
@@ -25,6 +27,7 @@ const AppLayout = () => {
       <Suspense fallback={<LoadingScreen />}>
         <Outlet />
       </Suspense>
+      <BottomNavigationBar />
     </div>
   );
 };
@@ -57,6 +60,10 @@ const appRouter = () =>
         {
           path: "cart",
           element: <Cart />,
+        },
+        {
+          path: "offers",
+          element: <Offers />,
         },
         {
           path: "resturants",
