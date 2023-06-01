@@ -45,7 +45,7 @@ const Body = () => {
           Search
         </button>
       </div>
-      <div className="res-container">
+      <div className="flex flex-wrap  max-w-screen-xl m-auto">
         {loadingRestutants ? (
           <LoadingScreen />
         ) : errorFetchingResturants ? (
@@ -57,6 +57,7 @@ const Body = () => {
             <Link
               key={resturant.data.id}
               to={"/resturants/" + resturant.data.id}
+              className="m-3"
             >
               <ResturantCard resturant={resturant} />
             </Link>

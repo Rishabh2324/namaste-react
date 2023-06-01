@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 
+import { CARD_TYPE } from "../utils/constants";
+
 const useResturants = () => {
   const [resturants, setResturants] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -16,7 +18,11 @@ const useResturants = () => {
         "https://www.swiggy.com/dapi/restaurants/list/v5?lat=25.461094843480193&lng=78.55619128793478&page_type=DESKTOP_WEB_LISTING"
       );
       const data = await response.json();
-      setResturants(data?.data?.cards[2]?.data?.data?.cards);
+      setResturants(
+        data?.data?.cards?.find(
+          (card) => card.cardType === CARD_TYPE.ALL_RESTURANTS
+        )?.data?.data?.cards
+      );
     } catch (error) {
       console.log(error);
       setError(true);

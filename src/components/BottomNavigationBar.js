@@ -17,7 +17,7 @@ const NavTab = ({ icon, label }) => {
 
 const BottomNavigationBar = () => {
   return (
-    <div className="fixed bottom-0 left-0 right-0 flex justify-between items-center px-4 md:hidden">
+    <div className="fixed bottom-0 left-0 right-0 flex justify-between items-center p-3 md:hidden bg-white">
       <Link to={"/"}>
         <NavTab icon={<MagnifyingGlassIcon />} label="chwiggy" />
       </Link>

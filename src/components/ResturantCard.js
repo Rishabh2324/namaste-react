@@ -10,9 +10,9 @@ const ResturantCard = ({ resturant }) => {
     cloudinaryImageId,
   } = resturant.data;
   return (
-    <div className="res-card">
+    <div className="w-72 px-4 pt-4 pb-10 border-2 border-white hover:border-2 hover:border-neutral-300">
       <img src={`${IMAGE_CDN_URL}/${cloudinaryImageId}`} alt={name} />
-      <h3>{name}</h3>
+      <h3 title={name}>{name}</h3>
       <h5>{cuisines.join(", ")}</h5>
       <h6>{maxDeliveryTime}</h6>
       <h6>{avgRating}</h6>

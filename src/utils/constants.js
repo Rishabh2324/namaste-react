@@ -4,4 +4,9 @@ const IMAGE_CDN_URL =
 const MOBILE_DEVICE_TYPE =
   "/Android|BlackBerry|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i";
 
-export { IMAGE_CDN_URL, MOBILE_DEVICE_TYPE };
+const CARD_TYPE = {
+  CAROUSELS: "carousel",
+  ALL_RESTURANTS: "seeAllRestaurants",
+};
+
+export { IMAGE_CDN_URL, MOBILE_DEVICE_TYPE, CARD_TYPE };
