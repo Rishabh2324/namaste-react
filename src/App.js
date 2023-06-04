@@ -6,6 +6,9 @@ import {
   Outlet,
   RouterProvider,
 } from "react-router-dom";
+import { Provider } from "react-redux";
+
+import store from "./utils/store";
 
 import Header from "./components/Header";
 import LoadingScreen from "./components/LoadingScreen";
@@ -22,13 +25,15 @@ const Profile = lazy(() => import("./components/Profile"));
 
 const AppLayout = () => {
   return (
-    <div className="app">
-      <Header />
-      <Suspense fallback={<LoadingScreen />}>
-        <Outlet />
-      </Suspense>
-      <BottomNavigationBar />
-    </div>
+    <Provider store={store}>
+      <div className="app">
+        <Header />
+        <Suspense fallback={<LoadingScreen />}>
+          <Outlet />
+        </Suspense>
+        <BottomNavigationBar />
+      </div>
+    </Provider>
   );
 };
 
