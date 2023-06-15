@@ -8,7 +8,7 @@ import {
 } from "react-router-dom";
 import { Provider } from "react-redux";
 
-import store from "./utils/store";
+import store from "./redux/store";
 
 import Header from "./components/Header";
 import LoadingScreen from "./components/LoadingScreen";
@@ -17,7 +17,7 @@ import BottomNavigationBar from "./components/BottomNavigationBar";
 const Body = lazy(() => import("./components/Body"));
 const AboutUs = lazy(() => import("./components/About"));
 const ErrorPage = lazy(() => import("./components/ErrorPage"));
-const Contact = lazy(() => import("./components/Contact"));
+const Search = lazy(() => import("./components/Search"));
 const ResturantMenu = lazy(() => import("./components/ResturantMenu"));
 const Cart = lazy(() => import("./components/Cart"));
 const Offers = lazy(() => import("./components/Offers"));
@@ -59,8 +59,8 @@ const appRouter = () =>
           ],
         },
         {
-          path: "contact",
-          element: <Contact />,
+          path: "search",
+          element: <Search />,
         },
         {
           path: "cart",

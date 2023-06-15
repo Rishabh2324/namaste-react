@@ -1,5 +1,5 @@
 const LoadingScreen = () => {
-  return <>Loading Screen UI</>;
+  return <div data-testid="shimmer">Loading Screen UI</div>;
 };
 
 export default LoadingScreen;

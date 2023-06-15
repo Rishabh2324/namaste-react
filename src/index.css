@@ -3,3 +3,9 @@
 @import "tailwindcss/components";
 
 @import "tailwindcss/utilities";
+
+.disable-scroll{
+    overflow: hidden;
+    /* TO PREVENT SCROLL FLIECKERING */
+    padding-right: 15px; 
+}

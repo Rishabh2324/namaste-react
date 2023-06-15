@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 
 import useResturant from "../hooks/useResturant";
-import { addItem } from "../utils/cartSlice";
+import { addItem } from "../redux/slices/cartSlice";
 
 const ResturantMenu = () => {
   const { id } = useParams();

@@ -1,16 +1,17 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
+import SortBar from "./SortBar";
 import ResturantCard from "./ResturantCard";
 import LoadingScreen from "./LoadingScreen";
 import ErrorScreen from "./ErrorScreen";
 
 import useResturants from "../hooks/useResturants";
 import useOnline from "../hooks/useOnline";
+import Filters from "./Filters";
 
 const Body = () => {
   const [filteredResturants, setFilteredResturants] = useState(null);
-  const [searchText, setSearchText] = useState("");
 
   const isUserOnline = useOnline();
   const { resturants, loadingRestutants, errorFetchingResturants } =
@@ -20,32 +21,59 @@ const Body = () => {
     if (resturants && resturants.length) setFilteredResturants(resturants);
   }, [resturants]);
 
-  const getFilteredResturants = (query) => {
-    const data =
-      resturants?.filter((resturants) =>
-        resturants?.data?.name?.toLowerCase()?.includes(query?.toLowerCase())
-      ) || [];
-    return data;
-  };
-
   if (!isUserOnline) return <h1>I AM OFFLINE</h1>;
 
   return (
-    <div className="app-body">
-      <div className="search">
-        <input
-          value={searchText}
-          onChange={(e) => setSearchText(e.target.value)}
-        />
-        <button
-          onClick={() =>
-            setFilteredResturants(getFilteredResturants(searchText))
-          }
-        >
-          Search
-        </button>
-      </div>
-      <div className="flex flex-wrap  max-w-screen-xl m-auto">
+    <div>
+      <SortBar
+        title={"103 resturants"}
+        sorts={[
+          {
+            type: "SortWidget",
+            key: "RELEVANCE",
+            title: "Relevance",
+            selected: 1,
+            visible: 1,
+            defaultSelection: true,
+          },
+          {
+            type: "SortWidget",
+            key: "DELIVERY_TIME",
+            title: "Delivery Time",
+            selected: 0,
+            visible: 1,
+            defaultSelection: false,
+          },
+          {
+            type: "SortWidget",
+            key: "RATING",
+            title: "Rating",
+            selected: 0,
+            visible: 1,
+            defaultSelection: false,
+          },
+          {
+            type: "SortWidget",
+            key: "COST_FOR_TWO",
+            title: "Cost: Low to High",
+            selected: 0,
+            visible: 1,
+            defaultSelection: false,
+          },
+          {
+            type: "SortWidget",
+            key: "COST_FOR_TWO_H2L",
+            title: "Cost: High to Low",
+            selected: 0,
+            visible: 1,
+            defaultSelection: false,
+          },
+        ]}
+      />
+      <div
+        className="flex flex-wrap max-w-screen-xl m-auto"
+        data-testid="res-list"
+      >
         {loadingRestutants ? (
           <LoadingScreen />
         ) : errorFetchingResturants ? (
@@ -64,6 +92,7 @@ const Body = () => {
           ))
         )}
       </div>
+      <Filters />
     </div>
   );
 };
