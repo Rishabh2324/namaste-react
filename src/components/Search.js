@@ -1,27 +1,70 @@
-import { useState } from "react";
-import useResturants from "../hooks/useResturants";
+import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+
+import { IMAGE_CDN_URL, SEARCH_URL } from "../utils/constants";
 
 import { MagnifyingGlassIcon, XMarkIcon } from "@heroicons/react/24/outline";
-import ResturantCard from "./ResturantCard";
-import { Link } from "react-router-dom";
+
+const SearchResult = ({ restaurant }) => {
+  const { cloudinaryId, text, tagToDisplay, metadata, type } = restaurant;
+  const parsedMetaData = JSON.parse(metadata);
+  if (type === "DISH") return null;
+  return (
+    <Link
+      className="flex p-2 hover:bg-gray-200 rounded-lg"
+      to={"/resturants/" + parsedMetaData?.data?.primaryRestaurantId}
+    >
+      <div className="w-16">
+        <img
+          className="w-full h-full"
+          src={`${IMAGE_CDN_URL}/${cloudinaryId}`}
+          alt={text}
+        />
+      </div>
+      <div className="ml-5">
+        <h5 className="font-semibold">{text}</h5>
+        <p className="text-sm text-gray-500">{tagToDisplay}</p>
+      </div>
+    </Link>
+  );
+};
+
+const NoSearchResult = () => {
+  return (
+    <div className="bg-gray-300 flex py-3 rounded-lg items-center">
+      <div className="border-gray-500 border-solid border w-12 h-12 rounded-md">
+        <MagnifyingGlassIcon className="text-gray-500 p-2" />
+      </div>
+      <p className="ml-5 text-sm text-gray-600">No results found</p>
+    </div>
+  );
+};
 
 const Search = () => {
   const [searchText, setSearchText] = useState("");
   const [filteredResturants, setFilteredResturants] = useState(null);
 
-  const { resturants } = useResturants();
-
-  const getFilteredResturants = (query) => {
-    setSearchText(query);
-    if (query.length === 0) {
-      setFilteredResturants([]);
-    } else {
-      const data =
-        resturants?.filter((resturants) =>
-          resturants?.data?.name?.toLowerCase()?.includes(query?.toLowerCase())
-        ) || [];
-      setFilteredResturants(data);
+  // Using Debounce
+  // There should be a gap of 200 ms between 2 key strokes
+  useEffect(() => {
+    if (isValidSearchQuery()) {
+      const timer = setTimeout(() => {
+        searchRestaurants();
+      }, 200);
+      return () => {
+        clearTimeout(timer);
+      };
     }
+  }, [searchText]);
+
+  const isValidSearchQuery = () => {
+    return !(searchText.length === 0 || searchText.length < 2);
+  };
+
+  const searchRestaurants = async () => {
+    const response = await fetch(SEARCH_URL + "&str=" + searchText);
+    const data = await response.json();
+    setFilteredResturants(data?.data?.suggestions || []);
   };
 
   return (
@@ -32,7 +75,7 @@ const Search = () => {
             className="w-full p-3 border-solid border border-gray-400 text-gray-500 outline-none rounded-md placeholder:font-semibold font-semibold"
             data-testid="search-inp"
             value={searchText}
-            onChange={(e) => getFilteredResturants(e.target.value)}
+            onChange={(e) => setSearchText(e.target.value)}
             placeholder="Search for resturants and food"
           />
           {searchText?.length > 0 ? (
@@ -54,19 +97,13 @@ const Search = () => {
           )}
         </div>
       </div>
-      <div
-        className="flex flex-wrap max-w-screen-xl m-auto"
-        data-testid="res-list"
-      >
+      <div className="flex flex-col max-w-screen-md m-auto mt-2">
         {filteredResturants?.map((resturant) => (
-          <Link
-            key={resturant.data.id}
-            to={"/resturants/" + resturant.data.id}
-            className="m-3"
-          >
-            <ResturantCard resturant={resturant} />
-          </Link>
+          <SearchResult restaurant={resturant} />
         ))}
+        {filteredResturants?.length === 0 && searchText?.length > 0 && (
+          <NoSearchResult />
+        )}
       </div>
     </>
   );

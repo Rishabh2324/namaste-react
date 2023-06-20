@@ -9,4 +9,16 @@ const CARD_TYPE = {
   ALL_RESTURANTS: "seeAllRestaurants",
 };
 
-export { IMAGE_CDN_URL, MOBILE_DEVICE_TYPE, CARD_TYPE };
+const RESTAURANTS_URL =
+  "https://www.swiggy.com/dapi/restaurants/list/v5?lat=25.461094843480193&lng=78.55619128793478&page_type=DESKTOP_WEB_LISTING";
+
+const SEARCH_URL =
+  "https://www.swiggy.com/dapi/restaurants/search/suggest?lat=25.461094843480193&lng=78.55619128793478";
+
+export {
+  IMAGE_CDN_URL,
+  MOBILE_DEVICE_TYPE,
+  SEARCH_URL,
+  RESTAURANTS_URL,
+  CARD_TYPE,
+};

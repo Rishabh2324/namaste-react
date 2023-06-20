@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { CARD_TYPE } from "../utils/constants";
+import { CARD_TYPE, RESTAURANTS_URL } from "../utils/constants";
 
 const useResturants = () => {
   const [resturants, setResturants] = useState(null);
@@ -14,9 +14,7 @@ const useResturants = () => {
 
   const fetchResturants = async () => {
     try {
-      const response = await fetch(
-        "https://www.swiggy.com/dapi/restaurants/list/v5?lat=25.461094843480193&lng=78.55619128793478&page_type=DESKTOP_WEB_LISTING"
-      );
+      const response = await fetch(RESTAURANTS_URL);
       const data = await response.json();
       setResturants(
         data?.data?.cards?.find(
