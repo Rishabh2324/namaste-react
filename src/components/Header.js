@@ -60,7 +60,12 @@ const Header = () => {
         </div>
         <div className="hidden md:flex [&>*]:ml-12 font-semibold">
           {links.map((link) => (
-            <NavItem to={link.to} label={link.label} icon={link.icon} />
+            <NavItem
+              key={link.to}
+              to={link.to}
+              label={link.label}
+              icon={link.icon}
+            />
           ))}
         </div>
         <div className="flex md:hidden">

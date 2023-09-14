@@ -9,8 +9,14 @@ const CARD_TYPE = {
   ALL_RESTURANTS: "seeAllRestaurants",
 };
 
+const QUERY_PARAM_KEYS = {
+  SORT_BY: "sortBy",
+  FILTERS: "filters",
+  OFFSET: "offset",
+};
+
 const RESTAURANTS_URL =
-  "https://www.swiggy.com/dapi/restaurants/list/v5?lat=25.461094843480193&lng=78.55619128793478&page_type=DESKTOP_WEB_LISTING";
+  "https://www.swiggy.com/dapi/restaurants/list/v5?lat=25.461094843480193&lng=78.55619128793478";
 
 const SEARCH_URL =
   "https://www.swiggy.com/dapi/restaurants/search/suggest?lat=25.461094843480193&lng=78.55619128793478";
@@ -21,4 +27,5 @@ export {
   SEARCH_URL,
   RESTAURANTS_URL,
   CARD_TYPE,
+  QUERY_PARAM_KEYS,
 };

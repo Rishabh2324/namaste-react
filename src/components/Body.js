@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-import SortBar from "./SortBar";
+import SortBar, { LoadingSortBar } from "./SortBar";
 import ResturantCard from "./ResturantCard";
 import LoadingScreen from "./LoadingScreen";
 import ErrorScreen from "./ErrorScreen";
@@ -14,85 +14,91 @@ const Body = () => {
   const [filteredResturants, setFilteredResturants] = useState(null);
 
   const isUserOnline = useOnline();
-  const { resturants, loadingRestutants, errorFetchingResturants } =
+  const { resturants, sorts, filters, fetchResturants, isError, isLoading } =
     useResturants();
 
   useEffect(() => {
-    if (resturants && resturants.length) setFilteredResturants(resturants);
+    if (resturants?.data && resturants?.data.length)
+      setFilteredResturants(resturants?.data);
   }, [resturants]);
 
   if (!isUserOnline) return <h1>I AM OFFLINE</h1>;
 
+  useEffect(() => {
+    // Implementing infinite scroll
+
+    if (!isLoading) {
+      const observer = new IntersectionObserver(function (enteries) {
+        enteries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            fetchResturants(
+              resturants?.currentResturants < resturants?.totalResturants,
+              resturants?.currentResturants + 15
+            );
+          }
+        });
+      }, {});
+
+      const list = document.getElementById("loading-cards");
+
+      observer.observe(list);
+    }
+  }, [isLoading]);
+
   return (
     <div>
-      <SortBar
-        title={"103 resturants"}
-        sorts={[
-          {
-            type: "SortWidget",
-            key: "RELEVANCE",
-            title: "Relevance",
-            selected: 1,
-            visible: 1,
-            defaultSelection: true,
-          },
-          {
-            type: "SortWidget",
-            key: "DELIVERY_TIME",
-            title: "Delivery Time",
-            selected: 0,
-            visible: 1,
-            defaultSelection: false,
-          },
-          {
-            type: "SortWidget",
-            key: "RATING",
-            title: "Rating",
-            selected: 0,
-            visible: 1,
-            defaultSelection: false,
-          },
-          {
-            type: "SortWidget",
-            key: "COST_FOR_TWO",
-            title: "Cost: Low to High",
-            selected: 0,
-            visible: 1,
-            defaultSelection: false,
-          },
-          {
-            type: "SortWidget",
-            key: "COST_FOR_TWO_H2L",
-            title: "Cost: High to Low",
-            selected: 0,
-            visible: 1,
-            defaultSelection: false,
-          },
-        ]}
-      />
+      {isLoading ? (
+        <LoadingSortBar />
+      ) : (
+        <SortBar
+          title={resturants?.totalResturants + " resturants"}
+          sorts={sorts}
+        />
+      )}
+
       <div
         className="flex flex-wrap max-w-screen-xl m-auto"
         data-testid="res-list"
       >
-        {loadingRestutants ? (
+        {isLoading ? (
           <LoadingScreen />
-        ) : errorFetchingResturants ? (
+        ) : isError ? (
           <ErrorScreen />
         ) : filteredResturants?.length === 0 ? (
           <>No resturants found for your search</>
         ) : (
           filteredResturants?.map((resturant) => (
             <Link
-              key={resturant.data.id}
-              to={"/resturants/" + resturant.data.id}
+              key={
+                resturant?.subtype === "basic"
+                  ? resturant.data.id
+                  : resturant?.data?.data?.id
+              }
+              to={
+                "/resturants/" + resturant?.subtype === "basic"
+                  ? resturant.data.id
+                  : resturant?.data?.data?.id
+              }
               className="m-3"
             >
-              <ResturantCard resturant={resturant} />
+              <ResturantCard
+                resturant={
+                  resturant?.subtype === "basic" ? resturant : resturant?.data
+                }
+              />
             </Link>
           ))
         )}
       </div>
-      <Filters />
+      {resturants?.currentResturants < resturants?.totalResturants && (
+        <div
+          className="flex flex-wrap max-w-screen-xl m-auto"
+          id="loading-cards"
+        >
+          <LoadingScreen />
+        </div>
+      )}
+      <Filters filters={filters} />
     </div>
   );
 };

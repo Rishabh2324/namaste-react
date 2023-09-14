@@ -1,5 +1,13 @@
+import { LoadingCard } from "./ResturantCard";
+
 const LoadingScreen = () => {
-  return <div data-testid="shimmer">Loading Screen UI</div>;
+  return (
+    <>
+      {[1, 2, 3, 4].map((el) => (
+        <LoadingCard key={el} />
+      ))}
+    </>
+  );
 };
 
 export default LoadingScreen;
